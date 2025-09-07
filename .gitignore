@@ -1,0 +1,46 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Node
+node_modules/
+**/node_modules/
+.pnpm-store/
+
+# Builds
+dist/
+build/
+**/dist/
+**/build/
+
+# Vite
+.vite/
+
+# Env
+.env
+.env.*
+
+# Editor
+.vscode/
+.idea/
+.DS_Store
+
+# Coverage
+coverage/
+
+# Runtime
+*.pid
+
+# Misc
+*.local
+.nvm/
+
+# Frontend specific
+client/frontend/.vite/
+client/frontend/node_modules/
+client/frontend/dist/
+
+# Server specific
+server/node_modules/
+server/dist/
