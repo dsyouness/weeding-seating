@@ -1,3 +1,694 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Styles pour l'image hero de mariage */
+.hero-image-container {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: -10rem;
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  max-height: 350px;
+  object-fit: cover;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.15);
+  animation: heroImageFadeIn 1s ease-out;
+}
+
+@keyframes heroImageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Styles pour le titre principal amélioré */
+.title-container {
+  text-align: center;
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.main-title {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-align: center;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  animation: titleFadeIn 1s ease-out;
+}
+
+.title-decoration {
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  margin: 0 auto;
+  border-radius: 2px;
+  animation: decorationSlide 1s ease-out 0.3s both;
+}
+
+@keyframes titleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes decorationSlide {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 80px;
+    opacity: 1;
+  }
+}
+
+/* Styles personnalisés pour la barre de recherche Google-style */
+.search-container {
+  position: relative;
+  width: 100%;
+  max-width: 28rem;
+  margin: 0 auto;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+.search-input-wrapper:hover {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.search-input-wrapper:focus-within {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-color: #6366f1;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  ring: 2px solid #6366f1;
+}
+
+.search-icon {
+  position: absolute;
+  left: 1rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #9ca3af;
+  transition: color 0.2s ease;
+}
+
+.search-input-wrapper:focus-within .search-icon {
+  color: #6366f1;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1rem 1.5rem 1rem 3rem;
+  font-size: 1rem;
+  background: transparent;
+  border: none;
+  outline: none;
+  border-radius: 9999px;
+}
+
+.search-input::placeholder {
+  color: #9ca3af;
+}
+
+.clear-button {
+  position: absolute;
+  right: 1rem;
+  color: #9ca3af;
+  transition: color 0.2s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
+.clear-button:hover {
+  color: #6b7280;
+}
+
+.search-results {
+  position: absolute;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  margin-top: 0.5rem;
+  background: white;
+  border: 1px solid #f3f4f6;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+  max-height: 20rem;
+  overflow-y: auto;
+}
+
+.search-result-item {
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  border-bottom: 1px solid #f9fafb;
+}
+
+.search-result-item:hover {
+  background-color: #f9fafb;
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-avatar {
+  width: 2rem;
+  height: 2rem;
+  background-color: #e0e7ff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.search-result-avatar span {
+  color: #6366f1;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.search-result-name {
+  flex: 1;
+  min-width: 0;
+  font-weight: 500;
+  color: #111827;
+}
+
+.search-result-arrow {
+  color: #9ca3af;
+  width: 1rem;
+  height: 1rem;
+}
+
+/* Styles pour l'affichage du GIF amélioré et plus grand */
+.gif-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 3rem;
+  animation: gifContainerFadeIn 0.5s ease-out;
+}
+
+.gif-wrapper {
+  width: 320px;
+  height: 320px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 1.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transform: scale(0.9);
+  animation: gifScale 0.6s ease-out 0.2s both;
+}
+
+.gif-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 1.5rem;
+}
+
+.gif-wrapper::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+  animation: shimmer 2s infinite;
+}
+
+.gif-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: relative;
+  z-index: 1;
+}
+
+.gif-text {
+  background: linear-gradient(135deg, #fff 0%, #f8fafc 100%);
+  padding: 1.5rem 3rem;
+  border-radius: 9999px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e2e8f0;
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-align: center;
+  animation: textBounce 0.8s ease-out 0.4s both;
+}
+
+/* Styles pour la section de résultat embellie */
+.result-container {
+  margin-top: 2rem;
+  text-align: center;
+  space-y: 1.5rem;
+  animation: resultFadeIn 0.8s ease-out;
+}
+
+.welcome-section {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.welcome-decoration {
+  width: 50px;
+  height: 2px;
+  background: linear-gradient(90deg, #f43f5e, #ec4899);
+  margin: 0 auto 0.75rem;
+  border-radius: 1px;
+  animation: decorationGrow 0.8s ease-out 0.3s both;
+}
+
+.welcome-text {
+  font-size: clamp(1.75rem, 4vw, 2.75rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-align: center;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 0.75rem;
+  animation: textSlideIn 0.6s ease-out 0.4s both;
+}
+
+.guest-name {
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  font-weight: 800;
+  background: linear-gradient(135deg, #f43f5e 0%, #ec4899 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  margin-bottom: 0.75rem;
+  animation: nameSlideIn 0.6s ease-out 0.6s both;
+}
+
+.table-section {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.table-label {
+  font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+  font-weight: 700;
+  background: linear-gradient(135deg, #8b5a2b 0%, #d4af37 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  margin-bottom: 1rem;
+  position: relative;
+  animation: labelFadeIn 0.6s ease-out 0.8s both;
+}
+
+.table-label::before {
+  content: '💍';
+  position: absolute;
+  left: -2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25rem;
+  animation: ringPulse 2s infinite ease-in-out;
+}
+
+.table-label::after {
+  content: '💍';
+  position: absolute;
+  right: -2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25rem;
+  animation: ringPulse 2s infinite ease-in-out 1s;
+}
+
+.table-number-container {
+  position: relative;
+  display: inline-block;
+}
+
+.table-number {
+  font-size: clamp(3.5rem, 7vw, 5rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, #8b5a2b 0%, #d4af37 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  text-shadow: 0 4px 8px rgba(139, 90, 43, 0.3);
+  letter-spacing: -0.02em;
+  animation: numberPop 0.8s ease-out 1s both;
+  position: relative;
+}
+
+.table-number::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  background: linear-gradient(45deg, rgba(212, 175, 55, 0.1), rgba(139, 90, 43, 0.1));
+  border-radius: 16px;
+  border: 2px solid rgba(212, 175, 55, 0.2);
+  z-index: -1;
+}
+
+.table-sparkles {
+  position: absolute;
+  top: -8px;
+  right: -16px;
+  font-size: 1.25rem;
+  animation: sparkle 2s infinite ease-in-out;
+}
+
+.button-section {
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 220px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.back-button {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #8b5a2b;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  border: 2px solid rgba(212, 175, 55, 0.3);
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(139, 90, 43, 0.15);
+  transition: all 0.3s ease;
+  animation: buttonSlideUp 0.6s ease-out 1.2s both;
+  position: relative;
+  overflow: hidden;
+  min-height: 40px;
+}
+
+.back-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(139, 90, 43, 0.05) 100%);
+  border-radius: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.back-button:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(212, 175, 55, 0.6);
+  box-shadow: 0 8px 20px rgba(139, 90, 43, 0.25);
+  color: #6d4423;
+}
+
+.back-button:hover::before {
+  opacity: 1;
+}
+
+.back-button:active {
+  transform: translateY(0);
+}
+
+/* Animations */
+@keyframes titleFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes decorationSlide {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 80px;
+    opacity: 1;
+  }
+}
+
+@keyframes gifContainerFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gifScale {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes textBounce {
+  0% {
+    transform: translateY(20px) scale(0.9);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(-5px) scale(1.05);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes resultFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes decorationGrow {
+  from {
+    width: 0;
+    opacity: 0;
+  }
+  to {
+    width: 60px;
+    opacity: 1;
+  }
+}
+
+@keyframes textSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes nameSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes labelFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes numberPop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2) rotate(180deg);
+    opacity: 1;
+  }
+}
+
+@keyframes buttonSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animations spéciales pour le mariage */
+@keyframes ringPulse {
+  0%, 100% {
+    transform: translateY(-50%) scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: translateY(-50%) scale(1.1);
+    opacity: 1;
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .gif-wrapper {
+    width: 280px;
+    height: 280px;
+  }
+
+  .gif-text {
+    padding: 1rem 2rem;
+    font-size: 1.25rem;
+  }
+
+  .table-label::before,
+  .table-label::after {
+    position: relative;
+    left: 0;
+    right: 0;
+    display: block;
+    margin: 0.25rem auto;
+  }
+
+  .back-button {
+    padding: 0.625rem 1rem;
+    font-size: 0.8rem;
+    min-height: 36px;
+  }
+
+  .button-section {
+    max-width: 200px;
+    padding: 0 1rem;
+  }
+
+  .result-container {
+    margin-top: 1.5rem;
+  }
+
+  .welcome-section {
+    margin-bottom: 1rem;
+  }
+
+  .table-section {
+    margin-bottom: 1.5rem;
+  }
+}

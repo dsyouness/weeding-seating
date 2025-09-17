@@ -29,6 +29,7 @@ export default function App() {
   const [selected, setSelected] = useState<Guest | null>(null)
   const [showGif, setShowGif] = useState(false)
   const inputRef = useRef<HTMLInputElement | null>(null)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const results = useMemo(() => {
     const q = normalize(query)
@@ -41,7 +42,7 @@ export default function App() {
   function onPick(guest: Guest) {
     setSelected(guest)
     setShowGif(true)
-    const durationMs = 2500
+    const durationMs = 3000
     setTimeout(() => setShowGif(false), durationMs)
   }
 
@@ -49,8 +50,30 @@ export default function App() {
     setSelected(null)
     setShowGif(false)
     setQuery('')
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = null
+    }
     requestAnimationFrame(() => inputRef.current?.focus())
   }
+
+  // Auto retour à l'accueil après 10 secondes sur la page de résultat
+  useEffect(() => {
+    if (!showGif && selected) {
+      // Démarrer le timeout de 10 secondes
+      timeoutRef.current = setTimeout(() => {
+        backToSearch()
+      }, 10000)
+    }
+
+    // Nettoyer le timeout si on change de page ou si le composant se démonte
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
+      }
+    }
+  }, [showGif, selected])
 
   const gifSrc = buildGifSrc(selected)
   const tableLabel = selected?.nom_table ? `${selected.nom_table}` : (selected ? `${selected.table}` : '')
@@ -58,70 +81,133 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-indigo-50 text-gray-900 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-center mb-8 tracking-tight">
-          Retrouvez votre table
-        </h1>
+        {/* Titre uniquement sur la page de recherche */}
+        {!selected && (
+          <>
+            <div className="hero-image-container">
+              <img
+                src="/home-site-weeding.jpeg"
+                alt="Mariage"
+                className="hero-image"
+              />
+            </div>
+            <div className="title-container">
+              <h1 className="main-title">
+                Retrouvez votre table
+              </h1>
+              <div className="title-decoration"></div>
+            </div>
+          </>
+        )}
 
         {/* Barre de recherche centrée et courte */}
         {!selected && (
-          <div className="flex justify-center mb-6">
-            <div className="relative w-full max-w-sm mx-auto">
-              <input
-                ref={inputRef}
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Tapez votre prénom ou nom"
-                className="w-full rounded-full bg-white/90 backdrop-blur border border-gray-200 shadow-lg px-6 py-4 text-base focus:outline-none focus:ring-4 focus:ring-indigo-200 focus:border-transparent placeholder-gray-400 mx-auto block"
-              />
+          <div className="flex justify-center mb-8">
+            <div className="search-container">
+              <div className="search-input-wrapper">
+                {/* Icône de recherche */}
+                <svg className="search-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  placeholder="Rechercher votre nom ou prénom..."
+                  className="search-input"
+                />
+
+                {/* Bouton clear */}
+                {query && (
+                  <button
+                    type="button"
+                    onClick={() => setQuery('')}
+                    className="clear-button"
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+
+              {/* Résultats de recherche */}
               {!!results.length && (
-                <ul className="absolute left-0 right-0 z-10 mt-2 bg-white border border-gray-200 rounded-2xl shadow-xl overflow-hidden max-h-80 overflow-y-auto">
-                  {results.map((g, idx) => (
-                    <li
-                      key={`${g.nom}-${g.prenom}-${idx}`}
-                      className="px-5 py-3 hover:bg-indigo-50 cursor-pointer text-gray-800"
-                      onClick={() => onPick(g)}
-                    >
-                      <span className="font-medium">{g.prenom} {g.nom}</span>
-                    </li>
-                  ))}
-                </ul>
+                <div className="search-results">
+                  <ul>
+                    {results.map((g, idx) => (
+                      <li
+                        key={`${g.nom}-${g.prenom}-${idx}`}
+                        className="search-result-item"
+                        onClick={() => onPick(g)}
+                      >
+                        <div className="search-result-avatar">
+                          <span>
+                            {g.prenom.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                        <div className="search-result-name">
+                          <span>{g.prenom} {g.nom}</span>
+                        </div>
+                        <div className="search-result-arrow">
+                          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
             </div>
           </div>
         )}
 
-        {/* Zone d'affichage GIF avec ratio et centrage */}
+        {/* Zone d'affichage GIF avec design amélioré */}
         {showGif && selected && (
-          <div className="mt-8">
-            <div className="mx-auto w-full max-w-xs aspect-square bg-black/80 rounded-2xl shadow-2xl overflow-hidden flex items-center justify-center">
+          <div className="gif-container">
+            <div className="gif-wrapper">
               <img
                 src={gifSrc}
                 alt="Celebration"
-                className="w-full h-full object-contain"
+                className="gif-image"
                 onError={(e) => { (e.currentTarget as HTMLImageElement).src = '/default.gif' }}
               />
+            </div>
+            <div className="gif-text">
+              🎉 Félicitations ! 🎉
             </div>
           </div>
         )}
 
         {/* Résultat: bienvenue + table en gros et vert + bouton retour */}
         {!showGif && selected && (
-          <div className="mt-10 text-center space-y-6">
-            <div>
-              <p className="text-2xl sm:text-3xl font-bold">Bienvenue {selected.prenom} {selected.nom}</p>
+          <div className="result-container">
+            <div className="welcome-section">
+              <div className="welcome-decoration"></div>
+              <p className="welcome-text">Bienvenue</p>
+              <p className="guest-name">{selected.prenom} {selected.nom}</p>
+              <div className="welcome-decoration"></div>
             </div>
-            <div className="space-y-2">
-              <p className="text-base text-gray-600">Vous êtes sur la table:</p>
-              <p className="text-6xl sm:text-7xl font-black text-green-600 tracking-tight">{tableLabel}</p>
+            <div className="table-section">
+              <p className="table-label">Vous êtes sur la table</p>
+              <div className="table-number-container">
+                <p className="table-number">{tableLabel}</p>
+                <div className="table-sparkles">✨</div>
+              </div>
             </div>
-            <div>
+            <div className="button-section">
               <button
                 type="button"
                 onClick={backToSearch}
-                className="inline-flex items-center gap-2 rounded-full bg-indigo-600 text-white px-6 py-3 text-base font-semibold shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-300"
+                className="back-button"
               >
-                Chercher ma table
+                <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                Nouvelle recherche
               </button>
             </div>
           </div>
