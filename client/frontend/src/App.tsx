@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './index.css'
 import type { Guest } from './types'
+import LanguageSelector from './LanguageSelector'
+import { translations, type Language } from './translations'
 
 function useGuests() {
   const [guests, setGuests] = useState<Guest[]>([])
@@ -28,6 +30,7 @@ export default function App() {
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState<Guest | null>(null)
   const [showGif, setShowGif] = useState(false)
+  const [language, setLanguage] = useState<Language>('fr')
   const inputRef = useRef<HTMLInputElement | null>(null)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
@@ -75,12 +78,21 @@ export default function App() {
     }
   }, [showGif, selected])
 
+  const t = translations[language]
   const gifSrc = buildGifSrc(selected)
   const tableLabel = selected?.nom_table ? `${selected.nom_table}` : (selected ? `${selected.table}` : '')
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-indigo-50 text-gray-900 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
+        {/* Sélecteur de langue */}
+        <div className="language-selector-container">
+          <LanguageSelector
+            currentLanguage={language}
+            onLanguageChange={setLanguage}
+          />
+        </div>
+
         {/* Titre uniquement sur la page de recherche */}
         {!selected && (
           <>
@@ -93,7 +105,7 @@ export default function App() {
             </div>
             <div className="title-container">
               <h1 className="main-title">
-                Retrouvez votre table
+                {t.title}
               </h1>
               <div className="title-decoration"></div>
             </div>
@@ -115,7 +127,7 @@ export default function App() {
                   type="text"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Rechercher votre nom ou prénom..."
+                  placeholder={t.searchPlaceholder}
                   className="search-input"
                 />
 
@@ -177,7 +189,7 @@ export default function App() {
               />
             </div>
             <div className="gif-text">
-              🎉 Félicitations ! 🎉
+              {t.congratulations}
             </div>
           </div>
         )}
@@ -187,12 +199,12 @@ export default function App() {
           <div className="result-container">
             <div className="welcome-section">
               <div className="welcome-decoration"></div>
-              <p className="welcome-text">Bienvenue</p>
+              <p className="welcome-text">{t.welcome}</p>
               <p className="guest-name">{selected.prenom} {selected.nom}</p>
               <div className="welcome-decoration"></div>
             </div>
             <div className="table-section">
-              <p className="table-label">Vous êtes sur la table</p>
+              <p className="table-label">{t.youAreAtTable}</p>
               <div className="table-number-container">
                 <p className="table-number">{tableLabel}</p>
                 <div className="table-sparkles">✨</div>
@@ -207,7 +219,7 @@ export default function App() {
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                Nouvelle recherche
+                {t.searchButton}
               </button>
             </div>
           </div>
