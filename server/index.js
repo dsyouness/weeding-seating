@@ -41,16 +41,39 @@ function loadGuests() {
   });
 }
 
-app.get('/api/guests', async (req, res) => {
+// Adaptation pour Vercel serverless
+export default function handler(req, res) {
+  // Configuration CORS
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
+  const { pathname } = new URL(req.url, `http://${req.headers.host}`);
+
+  if (pathname === '/api/guests') {
+    return handleGuests(req, res);
+  } else if (pathname === '/api/guests/search') {
+    return handleSearch(req, res);
+  } else {
+    res.status(404).json({ error: 'Not found' });
+  }
+}
+
+async function handleGuests(req, res) {
   try {
     const guests = await loadGuests();
     res.json({ guests });
   } catch (e) {
     res.status(500).json({ error: 'Failed to read CSV' });
   }
-});
+}
 
-app.get('/api/guests/search', async (req, res) => {
+async function handleSearch(req, res) {
   try {
     const q = normalize(req.query.q || '');
     const guests = await loadGuests();
@@ -62,9 +85,12 @@ app.get('/api/guests/search', async (req, res) => {
   } catch (e) {
     res.status(500).json({ error: 'Search failed' });
   }
-});
+}
 
-const PORT = process.env.PORT || 5174;
-app.listen(PORT, () => {
-  console.log(`Server listening on http://localhost:${PORT}`);
-});
+// Garde le serveur Express pour le développement local
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5174;
+  app.listen(PORT, () => {
+    console.log(`Server listening on http://localhost:${PORT}`);
+  });
+}
