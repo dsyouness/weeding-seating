@@ -9,9 +9,13 @@ function normalize(str) {
 async function loadGuests() {
   return new Promise((resolve, reject) => {
     const guests = [];
+    // Chercher le fichier CSV dans le bon répertoire
     const csvPath = path.join(process.cwd(), 'data', 'guests.csv');
 
+    console.log('Looking for CSV at:', csvPath);
+
     if (!fs.existsSync(csvPath)) {
+      console.log('CSV file not found, returning empty array');
       return resolve(guests);
     }
 
@@ -27,8 +31,14 @@ async function loadGuests() {
           guests.push({ prenom, nom, table, gif_name, nom_table });
         }
       })
-      .on('end', () => resolve(guests))
-      .on('error', (err) => reject(err));
+      .on('end', () => {
+        console.log('Loaded guests:', guests.length);
+        resolve(guests);
+      })
+      .on('error', (err) => {
+        console.error('CSV parsing error:', err);
+        reject(err);
+      });
   });
 }
 

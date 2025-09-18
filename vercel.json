@@ -18,5 +18,10 @@
       "src": "/(.*)",
       "dest": "/client/frontend/dist/index.html"
     }
-  ]
+  ],
+  "functions": {
+    "api/guests.js": {
+      "includeFiles": "data/**"
+    }
+  }
 }
