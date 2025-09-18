@@ -1,5 +1,3 @@
-import express from 'express';
-import cors from 'cors';
 import fs from 'fs';
 import path from 'path';
 import { parse } from 'csv-parse';
@@ -8,10 +6,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const app = express();
-app.use(cors());
-
-const DATA_DIR = process.env.DATA_DIR ? path.resolve(process.env.DATA_DIR) : path.resolve(__dirname, "../data");
+const DATA_DIR = path.resolve(__dirname, "../data");
 const CSV_PATH = path.join(DATA_DIR, 'guests.csv');
 
 function normalize(str) {
@@ -41,8 +36,7 @@ function loadGuests() {
   });
 }
 
-// Adaptation pour Vercel serverless
-export default function handler(req, res) {
+export default async function handler(req, res) {
   // Configuration CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
@@ -53,44 +47,26 @@ export default function handler(req, res) {
     return;
   }
 
-  const { pathname } = new URL(req.url, `http://${req.headers.host}`);
-
-  if (pathname === '/api/guests') {
-    return handleGuests(req, res);
-  } else if (pathname === '/api/guests/search') {
-    return handleSearch(req, res);
-  } else {
-    res.status(404).json({ error: 'Not found' });
-  }
-}
-
-async function handleGuests(req, res) {
   try {
-    const guests = await loadGuests();
-    res.json({ guests });
-  } catch (e) {
-    res.status(500).json({ error: 'Failed to read CSV' });
-  }
-}
+    const url = new URL(req.url, `https://${req.headers.host}`);
+    const pathname = url.pathname;
 
-async function handleSearch(req, res) {
-  try {
-    const q = normalize(req.query.q || '');
-    const guests = await loadGuests();
-    if (!q) return res.json({ results: [] });
-    const results = guests.filter(g => {
-      return normalize(g.nom).includes(q) || normalize(g.prenom).includes(q);
-    });
-    res.json({ results });
-  } catch (e) {
-    res.status(500).json({ error: 'Search failed' });
+    if (pathname === '/api/guests') {
+      const guests = await loadGuests();
+      res.json({ guests });
+    } else if (pathname === '/api/guests/search') {
+      const q = normalize(url.searchParams.get('q') || '');
+      const guests = await loadGuests();
+      if (!q) return res.json({ results: [] });
+      const results = guests.filter(g => {
+        return normalize(g.nom).includes(q) || normalize(g.prenom).includes(q);
+      });
+      res.json({ results });
+    } else {
+      res.status(404).json({ error: 'Not found' });
+    }
+  } catch (error) {
+    console.error('API Error:', error);
+    res.status(500).json({ error: 'Internal server error' });
   }
-}
-
-// Garde le serveur Express pour le développement local
-if (process.env.NODE_ENV !== 'production') {
-  const PORT = process.env.PORT || 5174;
-  app.listen(PORT, () => {
-    console.log(`Server listening on http://localhost:${PORT}`);
-  });
 }
