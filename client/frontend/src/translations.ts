@@ -6,7 +6,6 @@ export interface Translations {
   searchButton: string
   welcome: string
   youAreAtTable: string
-  newSearch: string
   congratulations: string
   languageSelector: {
     french: string
